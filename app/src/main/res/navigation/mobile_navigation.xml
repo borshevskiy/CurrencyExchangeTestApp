@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/popular_screen">
+
+    <fragment
+        android:id="@+id/popular_screen"
+        android:name="com.borshevskiy.currencyexchangetestapp.presentation.PopularFragment"
+        android:label="@string/title_popular"
+        tools:layout="@layout/fragment_popular" />
+
+    <fragment
+        android:id="@+id/favorites_screen"
+        android:name="com.borshevskiy.currencyexchangetestapp.presentation.FavoritesFragment"
+        android:label="@string/title_favorites"
+        tools:layout="@layout/fragment_favorites" />
+</navigation>

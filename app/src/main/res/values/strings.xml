@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CurrencyExchangeTestApp</string>
+    <string name="title_popular">Популярное</string>
+    <string name="title_favorites">Избранное</string>
+    <string name="search">Поиск</string>
+    <string name="settings">Сортировка</string>
+</resources>
