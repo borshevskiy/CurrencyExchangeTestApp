@@ -9,11 +9,11 @@ interface CurrencyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrencies(currencyList: List<CurrencyDbModel>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCurrency(currency: CurrencyDbModel)
+    @Update
+    suspend fun updateCurrency(currency: CurrencyDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavoriteCurrencies(favoriteCurrency: FavoriteCurrencyDbModel)
+    suspend fun insertFavoriteCurrency(favoriteCurrency: FavoriteCurrencyDbModel)
 
     @Query("SELECT * FROM all_currencies_list")
     fun readCurrencies(): LiveData<List<CurrencyDbModel>>

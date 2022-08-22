@@ -9,11 +9,19 @@
         android:id="@+id/popular_screen"
         android:name="com.borshevskiy.currencyexchangetestapp.presentation.PopularFragment"
         android:label="@string/title_popular"
-        tools:layout="@layout/fragment_popular" />
+        tools:layout="@layout/fragment_popular" >
+        <action
+            android:id="@+id/action_popular_screen_to_favorites_screen"
+            app:destination="@id/favorites_screen" />
+    </fragment>
 
     <fragment
         android:id="@+id/favorites_screen"
         android:name="com.borshevskiy.currencyexchangetestapp.presentation.FavoritesFragment"
         android:label="@string/title_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favorites_screen_to_popular_screen"
+            app:destination="@id/popular_screen" />
+    </fragment>
 </navigation>

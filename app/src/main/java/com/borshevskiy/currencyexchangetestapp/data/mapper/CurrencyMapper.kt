@@ -27,5 +27,5 @@ class CurrencyMapper @Inject constructor() {
 
     fun mapCurrencyToFavDbModel(currency: Currency): FavoriteCurrencyDbModel = FavoriteCurrencyDbModel(currency.name, currency.value)
 
-    fun mapCurrencyToDbModel(currency: Currency): CurrencyDbModel = CurrencyDbModel(currency.name, currency.value, true)
+    fun mapCurrencyToDbModel(currency: Currency): CurrencyDbModel = CurrencyDbModel(currency.name, currency.value, !currency.isFavorite)
 }

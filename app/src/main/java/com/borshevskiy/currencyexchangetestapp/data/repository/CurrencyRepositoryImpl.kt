@@ -27,13 +27,13 @@ class CurrencyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveToFavorites(currency: Currency) {
-        dao.insertFavoriteCurrencies(mapper.mapCurrencyToFavDbModel(currency))
-        dao.insertCurrency(mapper.mapCurrencyToDbModel(currency))
-    }
-
-    override suspend fun removeFromFavorites(currency: Currency) {
-        dao.deleteFavoriteCurrency(mapper.mapCurrencyToFavDbModel(currency))
+    override suspend fun saveAndRemoveFromFavorites(currency: Currency) {
+        dao.updateCurrency(mapper.mapCurrencyToDbModel(currency))
+        if (!currency.isFavorite) {
+            dao.insertFavoriteCurrency(mapper.mapCurrencyToFavDbModel(currency))
+        } else {
+            dao.deleteFavoriteCurrency(mapper.mapCurrencyToFavDbModel(currency))
+        }
     }
 
     override suspend fun loadData() {

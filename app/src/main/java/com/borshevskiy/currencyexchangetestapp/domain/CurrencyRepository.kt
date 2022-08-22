@@ -8,9 +8,7 @@ interface CurrencyRepository {
 
     fun getFavoriteCurrenciesList(): LiveData<List<Currency>>
 
-    suspend fun saveToFavorites(currency: Currency)
-
-    suspend fun removeFromFavorites(currency: Currency)
+    suspend fun saveAndRemoveFromFavorites(currency: Currency)
 
     suspend fun loadData()
 }

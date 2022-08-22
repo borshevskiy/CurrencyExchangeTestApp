@@ -12,19 +12,14 @@ class MainViewModel @Inject constructor(
     private val loadDataUseCase: LoadDataUseCase,
     private val getAllCurrenciesListUseCase: GetAllCurrenciesListUseCase,
     private val getFavoriteCurrenciesListUseCase: GetFavoriteCurrenciesListUseCase,
-    private val saveToFavoritesUseCase: SaveToFavoritesUseCase,
-    private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase
+    private val saveAndRemoveFromFavoritesUseCase: SaveAndRemoveFromFavoritesUseCase
 ) : ViewModel() {
 
     val allCurrenciesList = getAllCurrenciesListUseCase()
     val favoriteCurrenciesList = getFavoriteCurrenciesListUseCase()
 
-    fun insertToFavorites(currency: Currency) = viewModelScope.launch {
-        saveToFavoritesUseCase(currency)
-    }
-
-    fun deleteFromFavorites(currency: Currency) = viewModelScope.launch {
-        removeFromFavoritesUseCase(currency)
+    fun insertOrRemoveFromFavorites(currency: Currency) = viewModelScope.launch {
+        saveAndRemoveFromFavoritesUseCase(currency)
     }
 
     init {
