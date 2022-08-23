@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 
 interface CurrencyRepository {
 
-    fun getAllCurrenciesList(): LiveData<List<Currency>>
+    suspend fun getAllCurrenciesList(query: String)
 
-    fun getFavoriteCurrenciesList(): LiveData<List<Currency>>
+    suspend fun getFavoriteCurrenciesList(query: String, list: String = "")
 
     suspend fun saveAndRemoveFromFavorites(currency: Currency)
 
-    suspend fun loadData()
+    fun readAndFilterCurrencies(filter: String): LiveData<List<Currency>>
+
+    fun readAndFilterFavoriteCurrencies(filter: String): LiveData<List<Currency>>
 }

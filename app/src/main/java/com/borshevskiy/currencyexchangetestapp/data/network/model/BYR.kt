@@ -7,5 +7,5 @@ data class BYR(
     @SerializedName("code")
     val code: String,
     @SerializedName("value")
-    val value: Int
+    val value: Double
 )

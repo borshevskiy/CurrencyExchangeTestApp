@@ -8,5 +8,5 @@ data class CurrencyDbModel(
     @PrimaryKey
     val name: String,
     val value: String,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean
 )

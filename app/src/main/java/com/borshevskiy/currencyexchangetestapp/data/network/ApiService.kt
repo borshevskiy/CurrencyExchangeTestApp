@@ -9,6 +9,14 @@ interface ApiService {
 
     @GET("v3/latest")
     suspend fun getCurrenciesInfo(
-        @Query("apikey") apiKey: String = "Fml1dGeAfbmVOE0cZebLLYV2gBq1gZb1xfFBON37"
+        @Query("apikey") apiKey: String = "zJSt2VlZSQstwb1QZGkG5gYmw9omp4YuNSKZtQOI",
+        @Query("base_currency") baseCurrency: String = "USD"
+    ): Response<CurrencyInfoDto>
+
+    @GET("v3/latest")
+    suspend fun getFavoriteCurrenciesInfo(
+        @Query("apikey") apiKey: String = "zJSt2VlZSQstwb1QZGkG5gYmw9omp4YuNSKZtQOI",
+        @Query("base_currency") baseCurrency: String = "USD",
+        @Query("currencies") currencies: String = ""
     ): Response<CurrencyInfoDto>
 }

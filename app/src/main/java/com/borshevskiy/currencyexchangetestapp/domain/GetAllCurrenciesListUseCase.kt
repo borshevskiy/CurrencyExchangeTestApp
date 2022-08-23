@@ -4,6 +4,6 @@ import javax.inject.Inject
 
 class GetAllCurrenciesListUseCase @Inject constructor(private val repository: CurrencyRepository) {
 
-    operator fun invoke() = repository.getAllCurrenciesList()
+    suspend operator fun invoke(query: String) = repository.getAllCurrenciesList(query)
 
 }

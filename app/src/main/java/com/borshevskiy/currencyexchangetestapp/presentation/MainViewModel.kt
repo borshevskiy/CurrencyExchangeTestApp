@@ -9,22 +9,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val loadDataUseCase: LoadDataUseCase,
+    readAndFilterCurrenciesUseCase: ReadAndFilterCurrenciesUseCase,
+    readAndFilterFavCurrenciesUseCase: ReadAndFilterFavCurrenciesUseCase,
     private val getAllCurrenciesListUseCase: GetAllCurrenciesListUseCase,
     private val getFavoriteCurrenciesListUseCase: GetFavoriteCurrenciesListUseCase,
     private val saveAndRemoveFromFavoritesUseCase: SaveAndRemoveFromFavoritesUseCase
+
 ) : ViewModel() {
 
-    val allCurrenciesList = getAllCurrenciesListUseCase()
-    val favoriteCurrenciesList = getFavoriteCurrenciesListUseCase()
+    /** ROOM DATABASE **/
+    val readCurrencies = readAndFilterCurrenciesUseCase()
+    val readFavoriteCurrencies = readAndFilterFavCurrenciesUseCase()
 
     fun insertOrRemoveFromFavorites(currency: Currency) = viewModelScope.launch {
         saveAndRemoveFromFavoritesUseCase(currency)
     }
 
-    init {
-        viewModelScope.launch {
-            loadDataUseCase()
-        }
+    /** RETROFIT **/
+    fun getCurrencies(query: String) = viewModelScope.launch {
+        getAllCurrenciesListUseCase(query)
+    }
+
+    fun getFavoriteCurrencies(query: String, list: String) = viewModelScope.launch {
+        getFavoriteCurrenciesListUseCase(query, list)
     }
 }

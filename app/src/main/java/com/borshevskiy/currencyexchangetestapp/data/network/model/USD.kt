@@ -7,5 +7,5 @@ data class USD(
     @SerializedName("code")
     val code: String,
     @SerializedName("value")
-    val value: Int
+    val value: Double
 )

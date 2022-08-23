@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:text="USD"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -35,7 +36,7 @@
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_query"
+        android:src="@drawable/ic_filter"
         android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,32 +45,13 @@
         android:id="@+id/rvCurrencyList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="70dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/currency_item" />
-
-    <Button
-        android:id="@+id/popular_screen"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/title_popular"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/favorites_screen"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/favorites_screen"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/title_favorites"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/popular_screen" />
+        tools:listitem="@layout/currency_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

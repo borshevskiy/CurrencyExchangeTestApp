@@ -4,6 +4,6 @@ import javax.inject.Inject
 
 class GetFavoriteCurrenciesListUseCase @Inject constructor(private val repository: CurrencyRepository) {
 
-    operator fun invoke() = repository.getFavoriteCurrenciesList()
+    suspend operator fun invoke(query: String, list: String) = repository.getFavoriteCurrenciesList(query, list)
 
 }

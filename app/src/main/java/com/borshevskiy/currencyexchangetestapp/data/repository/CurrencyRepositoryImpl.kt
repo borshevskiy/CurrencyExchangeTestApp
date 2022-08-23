@@ -14,17 +14,15 @@ class CurrencyRepositoryImpl @Inject constructor(
     private val mapper: CurrencyMapper,
     private val dao: CurrencyDao
 ) : CurrencyRepository {
-    
-    override fun getAllCurrenciesList(): LiveData<List<Currency>> {
-        return Transformations.map(dao.readCurrencies()) {
-            it.map { mapper.mapDbModelToCurrency(it) }
-        }
+
+    override suspend fun getAllCurrenciesList(query: String) {
+        val response = apiService.getCurrenciesInfo(baseCurrency = query)
+        if (response.isSuccessful) { dao.insertCurrencies(mapper.mapDtoToDbModel(response.body()!!)) }
     }
 
-    override fun getFavoriteCurrenciesList(): LiveData<List<Currency>> {
-        return Transformations.map(dao.readFavoriteCurrencies()) {
-            it.map { mapper.mapFavDbModelToCurrency(it) }
-        }
+    override suspend fun getFavoriteCurrenciesList(query: String, list: String) {
+        val response = apiService.getFavoriteCurrenciesInfo(baseCurrency = query, currencies = list)
+        if (response.isSuccessful) { dao.insertFavoriteCurrencies(mapper.mapDtoToDbModel(response.body()!!)) }
     }
 
     override suspend fun saveAndRemoveFromFavorites(currency: Currency) {
@@ -36,8 +34,23 @@ class CurrencyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loadData() {
-        val response = apiService.getCurrenciesInfo()
-        if (response.isSuccessful) { dao.insertCurrencies(mapper.mapDtoToDbModel(response.body()!!)) }
+    override fun readAndFilterCurrencies(filter: String): LiveData<List<Currency>> {
+        return when (filter) {
+            "nameAsc" -> Transformations.map(dao.readCurrenciesNameAsc()) { it.map { mapper.mapDbModelToCurrency(it) } }
+            "nameDesc" -> Transformations.map(dao.readCurrenciesNameDesc()) { it.map { mapper.mapDbModelToCurrency(it) } }
+            "valueAsc" -> Transformations.map(dao.readCurrenciesValueAsc()) { it.map { mapper.mapDbModelToCurrency(it) } }
+            "valueDesc" -> Transformations.map(dao.readCurrenciesValueDesc()) { it.map { mapper.mapDbModelToCurrency(it) } }
+            else -> { return Transformations.map(dao.readCurrenciesNameAsc()) { it.map { mapper.mapDbModelToCurrency(it) } } }
+        }
+    }
+
+    override fun readAndFilterFavoriteCurrencies(filter: String): LiveData<List<Currency>> {
+        return when (filter) {
+            "nameAsc" -> Transformations.map(dao.readFavoriteCurrenciesNameAsc()) { it.map { mapper.mapFavDbModelToCurrency(it) } }
+            "nameDesc" -> Transformations.map(dao.readFavoriteCurrenciesNameDesc()) { it.map { mapper.mapFavDbModelToCurrency(it) } }
+            "valueAsc" -> Transformations.map(dao.readFavoriteCurrenciesValueAsc()) { it.map { mapper.mapFavDbModelToCurrency(it) } }
+            "valueDesc" -> Transformations.map(dao.readFavoriteCurrenciesValueDesc()) { it.map { mapper.mapFavDbModelToCurrency(it) } }
+            else -> { return Transformations.map(dao.readFavoriteCurrenciesNameAsc()) { it.map { mapper.mapFavDbModelToCurrency(it) } } }
+        }
     }
 }

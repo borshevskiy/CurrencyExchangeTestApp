@@ -2,7 +2,6 @@ package com.borshevskiy.currencyexchangetestapp.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.borshevskiy.currencyexchangetestapp.R
@@ -33,16 +32,13 @@ class CurrencyAdapter @Inject constructor(private val mainViewModel: MainViewMod
         with(holder.binding) {
             currencyName.text = currency.name
             currencyValue.text = currency.value
-//            if (currency.isFavorite) { clicked(isFavorite, holder) } else { unClicked(isFavorite, holder) }
+            if (currency.isFavorite) {
+                isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_clicked))
+            } else { isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_unclicked))
+            }
             isFavorite.setOnClickListener {
                 this@CurrencyAdapter.isFavorite = !this@CurrencyAdapter.isFavorite
-                mainViewModel.insertOrRemoveFromFavorites(
-                    Currency(
-                        currency.name,
-                        currency.value,
-                        !this@CurrencyAdapter.isFavorite
-                    )
-                )
+                mainViewModel.insertOrRemoveFromFavorites(Currency(currency.name, currency.value, !this@CurrencyAdapter.isFavorite))
                 if (!this@CurrencyAdapter.isFavorite) {
                     isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_unclicked))
                 } else {
@@ -50,13 +46,5 @@ class CurrencyAdapter @Inject constructor(private val mainViewModel: MainViewMod
                 }
             }
         }
-    }
-
-    private fun clicked(imageView: ImageView, holder: CurrencyViewHolder) {
-        imageView.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_clicked))
-    }
-
-    private fun unClicked(imageView: ImageView, holder: CurrencyViewHolder) {
-        imageView.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_unclicked))
     }
 }
