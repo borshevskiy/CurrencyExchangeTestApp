@@ -43,7 +43,7 @@ class PopularFragment : Fragment() {
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 mainViewModel.getCurrencies(parent.getItemAtPosition(position).toString()) }
         binding.filterFab.setOnClickListener {
-            findNavController().navigate(R.id.action_popular_screen_to_filterFragment) }
+            findNavController().navigate(PopularFragmentDirections.actionPopularScreenToFilterFragment("POPULAR")) }
         return binding.root
     }
 

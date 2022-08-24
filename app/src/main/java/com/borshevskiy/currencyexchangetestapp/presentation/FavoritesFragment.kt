@@ -43,7 +43,7 @@ class FavoritesFragment : Fragment() {
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 mainViewModel.getFavoriteCurrencies(parent.getItemAtPosition(position).toString(), "") }
         binding.filterFab.setOnClickListener {
-            findNavController().navigate(R.id.action_popular_screen_to_filterFragment) }
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesScreenToFilterFragment("FAVORITES")) }
         return binding.root
     }
 

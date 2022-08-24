@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_popular_screen_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <argument
+            android:name="filter"
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
 
     <fragment
@@ -23,6 +27,10 @@
         <action
             android:id="@+id/action_favorites_screen_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <argument
+            android:name="filter"
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
