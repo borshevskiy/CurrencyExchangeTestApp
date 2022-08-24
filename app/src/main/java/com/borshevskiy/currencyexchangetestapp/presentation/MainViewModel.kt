@@ -17,8 +17,10 @@ class MainViewModel @Inject constructor(
 
 ) : ViewModel() {
 
+    lateinit var filter: String
+
     /** ROOM DATABASE **/
-    val readCurrencies = readAndFilterCurrenciesUseCase()
+    val readCurrencies = readAndFilterCurrenciesUseCase(filter)
     val readFavoriteCurrencies = readAndFilterFavCurrenciesUseCase()
 
     fun insertOrRemoveFromFavorites(currency: Currency) = viewModelScope.launch {
