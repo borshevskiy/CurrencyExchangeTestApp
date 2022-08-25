@@ -1,14 +1,15 @@
 package com.borshevskiy.currencyexchangetestapp.presentation
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.borshevskiy.currencyexchangetestapp.R
@@ -23,28 +24,34 @@ class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
     private val mAdapter by lazy { FavCurrencyAdapter(mainViewModel) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
+        preferences = requireActivity().getSharedPreferences("app_settings", MODE_PRIVATE)
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.rvCurrencyList.adapter = mAdapter
         readDatabase()
         binding.autoCompleteTextView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                mainViewModel.getFavoriteCurrencies(parent.getItemAtPosition(position).toString(), "") }
+                mainViewModel.getFavoriteCurrencies(parent.getItemAtPosition(position).toString(),
+                    "")
+            }
         binding.filterFab.setOnClickListener {
-            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesScreenToFilterFragment("FAVORITES")) }
-        return binding.root
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesScreenToFilterFragment(
+                "FAVORITES"))
+        }
     }
 
     override fun onDestroyView() {
@@ -56,11 +63,11 @@ class FavoritesFragment : Fragment() {
         lifecycleScope.launch {
             mainViewModel.readFavoriteCurrencies.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    val namesList = mutableListOf<String>()
-                    database.forEach { currency -> namesList.add(currency.name) }
-                    binding.autoCompleteTextView.setAdapter(ArrayAdapter(requireContext(), R.layout.dropdown_item, namesList))
                     mAdapter.submitList(database)
-                } else mainViewModel.getCurrencies("")
+                }
+                binding.autoCompleteTextView.setAdapter(ArrayAdapter(requireContext(),
+                    R.layout.dropdown_item,
+                    preferences.getString("CurrencyNames", "")!!.split(",")))
             }
         }
     }

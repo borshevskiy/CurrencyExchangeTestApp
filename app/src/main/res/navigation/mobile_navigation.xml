@@ -14,7 +14,7 @@
             android:id="@+id/action_popular_screen_to_filterFragment"
             app:destination="@id/filterFragment" />
         <argument
-            android:name="filter"
+            android:name="popularFilter"
             app:argType="string"
             android:defaultValue='""' />
     </fragment>
@@ -28,7 +28,7 @@
             android:id="@+id/action_favorites_screen_to_filterFragment"
             app:destination="@id/filterFragment" />
         <argument
-            android:name="filter"
+            android:name="favoritesFilter"
             app:argType="string"
             android:defaultValue='""' />
     </fragment>

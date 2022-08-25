@@ -1,5 +1,6 @@
 package com.borshevskiy.currencyexchangetestapp.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.borshevskiy.currencyexchangetestapp.domain.*
@@ -9,6 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    state: SavedStateHandle,
     readAndFilterCurrenciesUseCase: ReadAndFilterCurrenciesUseCase,
     readAndFilterFavCurrenciesUseCase: ReadAndFilterFavCurrenciesUseCase,
     private val getAllCurrenciesListUseCase: GetAllCurrenciesListUseCase,
@@ -17,11 +19,12 @@ class MainViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    lateinit var filter: String
+    private val filter = state["popularFilter"] ?: ""
+    private val favFilter = state["favoritesFilter"] ?: ""
 
     /** ROOM DATABASE **/
     val readCurrencies = readAndFilterCurrenciesUseCase(filter)
-    val readFavoriteCurrencies = readAndFilterFavCurrenciesUseCase()
+    val readFavoriteCurrencies = readAndFilterFavCurrenciesUseCase(favFilter)
 
     fun insertOrRemoveFromFavorites(currency: Currency) = viewModelScope.launch {
         saveAndRemoveFromFavoritesUseCase(currency)

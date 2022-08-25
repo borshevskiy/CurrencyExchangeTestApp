@@ -14,7 +14,7 @@ class CurrencyMapper @Inject constructor() {
             currencyList.add(
                 CurrencyDbModel(
                     currency.substringAfter("code=").substringBefore(","),
-                    currency.substringAfter("value=").removeSuffix("))"),
+                    currency.substringAfter("value=").removeSuffix("))").toDouble(),
                     false
                 )
             )
@@ -22,11 +22,11 @@ class CurrencyMapper @Inject constructor() {
         return currencyList
     }
 
-    fun mapDbModelToCurrency(dbModel: CurrencyDbModel): Currency = Currency(dbModel.name, dbModel.value, dbModel.isFavorite)
+    fun mapDbModelToCurrency(dbModel: CurrencyDbModel): Currency = Currency(dbModel.name, dbModel.value.toString(), dbModel.isFavorite)
 
-    fun mapFavDbModelToCurrency(favDbModel: FavoriteCurrencyDbModel): Currency = Currency(favDbModel.name, favDbModel.value, true)
+    fun mapFavDbModelToCurrency(favDbModel: FavoriteCurrencyDbModel): Currency = Currency(favDbModel.name, favDbModel.value.toString(), true)
 
-    fun mapCurrencyToFavDbModel(currency: Currency): FavoriteCurrencyDbModel = FavoriteCurrencyDbModel(currency.name, currency.value)
+    fun mapCurrencyToFavDbModel(currency: Currency): FavoriteCurrencyDbModel = FavoriteCurrencyDbModel(currency.name, currency.value.toDouble())
 
-    fun mapCurrencyToDbModel(currency: Currency): CurrencyDbModel = CurrencyDbModel(currency.name, currency.value, !currency.isFavorite)
+    fun mapCurrencyToDbModel(currency: Currency): CurrencyDbModel = CurrencyDbModel(currency.name, currency.value.toDouble(), !currency.isFavorite)
 }

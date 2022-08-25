@@ -1,6 +1,7 @@
 package com.borshevskiy.currencyexchangetestapp.presentation
 
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.borshevskiy.currencyexchangetestapp.R
 import com.borshevskiy.currencyexchangetestapp.databinding.FragmentPopularBinding
 import com.borshevskiy.currencyexchangetestapp.presentation.adapter.CurrencyAdapter
@@ -23,20 +23,18 @@ class PopularFragment : Fragment() {
 
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
-    private val args by navArgs<PopularFragmentArgs>()
+
     private val mainViewModel: MainViewModel by viewModels()
     private val mAdapter by lazy { CurrencyAdapter(mainViewModel) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel.filter = args.filter
-    }
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
+        preferences = requireActivity().getSharedPreferences("app_settings", MODE_PRIVATE)
         _binding = FragmentPopularBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,9 +45,13 @@ class PopularFragment : Fragment() {
         readDatabase()
         binding.autoCompleteTextView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                mainViewModel.getCurrencies(parent.getItemAtPosition(position).toString()) }
+                val query = parent.getItemAtPosition(position).toString()
+                mainViewModel.getCurrencies(query)
+            }
         binding.filterFab.setOnClickListener {
-            findNavController().navigate(PopularFragmentDirections.actionPopularScreenToFilterFragment("POPULAR")) }
+            findNavController().navigate(PopularFragmentDirections.actionPopularScreenToFilterFragment(
+                "POPULAR"))
+        }
     }
 
     override fun onDestroyView() {
@@ -61,9 +63,17 @@ class PopularFragment : Fragment() {
         lifecycleScope.launch {
             mainViewModel.readCurrencies.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    val namesList = mutableListOf<String>()
-                    database.forEach { currency -> namesList.add(currency.name) }
-                    binding.autoCompleteTextView.setAdapter(ArrayAdapter(requireContext(), R.layout.dropdown_item, namesList))
+                    if (!preferences.contains("CurrencyNames")) {
+                        val namesList = mutableListOf<String>()
+                        database.forEach { currency ->
+                            namesList.add(currency.name)
+                            preferences.edit().putString("CurrencyNames", namesList.toString().removeSurrounding("[", "]"))
+                                .apply()
+                        }
+                    }
+                    binding.autoCompleteTextView.setAdapter(ArrayAdapter(requireContext(),
+                        R.layout.dropdown_item,
+                        preferences.getString("CurrencyNames", "")!!.split(",")))
                     mAdapter.submitList(database)
                 } else mainViewModel.getCurrencies("")
             }

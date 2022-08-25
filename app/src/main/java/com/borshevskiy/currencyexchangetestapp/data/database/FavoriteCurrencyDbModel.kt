@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class FavoriteCurrencyDbModel(
     @PrimaryKey
     val name: String,
-    val value: String
+    val value: Double
 )

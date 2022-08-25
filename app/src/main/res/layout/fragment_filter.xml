@@ -10,7 +10,7 @@
         android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
         android:text="@string/filter_text"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter">
 
@@ -30,44 +30,44 @@
             android:id="@+id/name_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:text="@string/name_filter"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/filter" />
 
         <RadioButton
             android:id="@+id/name_asc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:text="@string/ascending" />
 
         <RadioButton
             android:id="@+id/name_desc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:text="@string/descending" />
 
         <TextView
             android:id="@+id/value_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:text="@string/value_filter"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/filter" />
 
         <RadioButton
             android:id="@+id/value_asc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:text="@string/ascending" />
 
         <RadioButton
             android:id="@+id/value_desc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:text="@string/descending" />
 
     </RadioGroup>
@@ -79,9 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:text="@string/sort"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
