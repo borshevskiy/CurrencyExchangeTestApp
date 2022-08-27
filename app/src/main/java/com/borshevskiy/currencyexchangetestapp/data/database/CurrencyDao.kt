@@ -10,13 +10,16 @@ interface CurrencyDao {
     suspend fun insertCurrencies(currencyList: List<CurrencyDbModel>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavoriteCurrencies(currencyList: List<CurrencyDbModel>)
+    suspend fun insertFavoriteCurrencies(currencyList: List<FavoriteCurrencyDbModel>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteCurrency(favoriteCurrency: FavoriteCurrencyDbModel)
 
     @Update
     suspend fun updateCurrency(currency: CurrencyDbModel)
+
+    @Query("UPDATE all_currencies_list SET isFavorite=:isFavorite WHERE name=:name")
+    suspend fun backupFavorites(name: String, isFavorite: Boolean)
 
     @Query("SELECT * FROM all_currencies_list ORDER BY name ASC")
     fun readCurrenciesNameAsc(): LiveData<List<CurrencyDbModel>>
@@ -44,5 +47,4 @@ interface CurrencyDao {
 
     @Delete
     suspend fun deleteFavoriteCurrency(favoriteCurrency: FavoriteCurrencyDbModel)
-
 }

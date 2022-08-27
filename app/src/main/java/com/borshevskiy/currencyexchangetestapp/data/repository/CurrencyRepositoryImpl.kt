@@ -1,5 +1,8 @@
 package com.borshevskiy.currencyexchangetestapp.data.repository
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.borshevskiy.currencyexchangetestapp.data.database.CurrencyDao
@@ -7,22 +10,35 @@ import com.borshevskiy.currencyexchangetestapp.data.mapper.CurrencyMapper
 import com.borshevskiy.currencyexchangetestapp.data.network.ApiService
 import com.borshevskiy.currencyexchangetestapp.domain.Currency
 import com.borshevskiy.currencyexchangetestapp.domain.CurrencyRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class CurrencyRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val apiService: ApiService,
     private val mapper: CurrencyMapper,
     private val dao: CurrencyDao
 ) : CurrencyRepository {
 
+    private val preferences = context.getSharedPreferences("app_settings", MODE_PRIVATE)
+
     override suspend fun getAllCurrenciesList(query: String) {
         val response = apiService.getCurrenciesInfo(baseCurrency = query)
-        if (response.isSuccessful) { dao.insertCurrencies(mapper.mapDtoToDbModel(response.body()!!)) }
+        if (response.isSuccessful) {
+            dao.insertCurrencies(mapper.mapDtoToDbModel(response.body()!!))
+            if (preferences.contains("FAVORITES")) {
+                val favList = preferences.getString("FAVORITES", "")!!.removeSuffix(",").split(",")
+                favList.forEach { dao.backupFavorites(it, true) }
+            }
+        }
     }
 
     override suspend fun getFavoriteCurrenciesList(query: String, list: String) {
         val response = apiService.getFavoriteCurrenciesInfo(baseCurrency = query, currencies = list)
-        if (response.isSuccessful) { dao.insertFavoriteCurrencies(mapper.mapDtoToDbModel(response.body()!!)) }
+        Log.d("TESTREPO", response.toString())
+        if (response.isSuccessful) {
+            dao.insertFavoriteCurrencies(mapper.mapDtoToFavDbModel(response.body()!!))
+        }
     }
 
     override suspend fun saveAndRemoveFromFavorites(currency: Currency) {

@@ -22,6 +22,20 @@ class CurrencyMapper @Inject constructor() {
         return currencyList
     }
 
+    fun mapDtoToFavDbModel(dto: CurrencyInfoDto): List<FavoriteCurrencyDbModel> {
+        val currencyList = mutableListOf<FavoriteCurrencyDbModel>()
+        dto.data.toString().split("(").forEach { currency ->
+            if (currency.contains("code=")) {
+                currencyList.add(
+                    FavoriteCurrencyDbModel(
+                        currency.substringAfter("code=").substringBefore(","),
+                        currency.substringAfter("value=").substringBefore("),").toDouble())
+                )
+            }
+        }
+        return currencyList
+    }
+
     fun mapDbModelToCurrency(dbModel: CurrencyDbModel): Currency = Currency(dbModel.name, dbModel.value.toString(), dbModel.isFavorite)
 
     fun mapFavDbModelToCurrency(favDbModel: FavoriteCurrencyDbModel): Currency = Currency(favDbModel.name, favDbModel.value.toString(), true)

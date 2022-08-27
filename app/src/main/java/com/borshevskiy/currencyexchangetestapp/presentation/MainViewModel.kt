@@ -16,7 +16,6 @@ class MainViewModel @Inject constructor(
     private val getAllCurrenciesListUseCase: GetAllCurrenciesListUseCase,
     private val getFavoriteCurrenciesListUseCase: GetFavoriteCurrenciesListUseCase,
     private val saveAndRemoveFromFavoritesUseCase: SaveAndRemoveFromFavoritesUseCase
-
 ) : ViewModel() {
 
     private val filter = state["popularFilter"] ?: ""

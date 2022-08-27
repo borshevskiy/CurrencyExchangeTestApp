@@ -24,7 +24,7 @@ tools:context=".presentation.FavoritesFragment">
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textAlignment="center"
-        android:text="USD"/>
+        tools:text="USD"/>
 
 </com.google.android.material.textfield.TextInputLayout>
 

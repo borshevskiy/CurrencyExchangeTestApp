@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.borshevskiy.currencyexchangetestapp.R
 import com.borshevskiy.currencyexchangetestapp.databinding.CurrencyItemBinding
 import com.borshevskiy.currencyexchangetestapp.domain.Currency
 import com.borshevskiy.currencyexchangetestapp.presentation.MainViewModel
@@ -21,7 +22,9 @@ class FavCurrencyAdapter @Inject constructor(private val mainViewModel: MainView
         with(holder.binding) {
             currencyName.text = favCurrency.name
             currencyValue.text = favCurrency.value
+            isFavorite.setBackgroundResource(R.drawable.ic_star_clicked)
             isFavorite.setOnClickListener {
+                mainViewModel.insertOrRemoveFromFavorites(Currency(favCurrency.name, favCurrency.value, true))
             }
         }
     }

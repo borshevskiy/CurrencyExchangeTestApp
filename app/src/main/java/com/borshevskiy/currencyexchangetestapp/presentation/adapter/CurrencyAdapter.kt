@@ -10,10 +10,9 @@ import com.borshevskiy.currencyexchangetestapp.domain.Currency
 import com.borshevskiy.currencyexchangetestapp.presentation.MainViewModel
 import javax.inject.Inject
 
-class CurrencyAdapter @Inject constructor(private val mainViewModel: MainViewModel) :
+class CurrencyAdapter @Inject constructor(
+    private val mainViewModel: MainViewModel) :
     ListAdapter<Currency, CurrencyAdapter.CurrencyViewHolder>(CurrencyDiffCallback) {
-
-    private var isFavorite = false
 
     class CurrencyViewHolder(val binding: CurrencyItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -32,18 +31,9 @@ class CurrencyAdapter @Inject constructor(private val mainViewModel: MainViewMod
         with(holder.binding) {
             currencyName.text = currency.name
             currencyValue.text = currency.value
-            if (currency.isFavorite) {
-                isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_clicked))
-            } else { isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_unclicked))
-            }
+            if (currency.isFavorite) isFavorite.setBackgroundResource(R.drawable.ic_star_clicked) else isFavorite.setBackgroundResource(R.drawable.ic_star_unclicked)
             isFavorite.setOnClickListener {
-                this@CurrencyAdapter.isFavorite = !this@CurrencyAdapter.isFavorite
-                mainViewModel.insertOrRemoveFromFavorites(Currency(currency.name, currency.value, !this@CurrencyAdapter.isFavorite))
-                if (!this@CurrencyAdapter.isFavorite) {
-                    isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_unclicked))
-                } else {
-                    isFavorite.setImageDrawable(holder.itemView.context.getDrawable(R.drawable.ic_star_clicked))
-                }
+                mainViewModel.insertOrRemoveFromFavorites(Currency(currency.name, currency.value, currency.isFavorite))
             }
         }
     }

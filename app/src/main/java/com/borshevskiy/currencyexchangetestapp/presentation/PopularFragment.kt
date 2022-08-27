@@ -3,6 +3,7 @@ package com.borshevskiy.currencyexchangetestapp.presentation
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.borshevskiy.currencyexchangetestapp.R
 import com.borshevskiy.currencyexchangetestapp.databinding.FragmentPopularBinding
+import com.borshevskiy.currencyexchangetestapp.domain.Currency
 import com.borshevskiy.currencyexchangetestapp.presentation.adapter.CurrencyAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -45,12 +48,22 @@ class PopularFragment : Fragment() {
         readDatabase()
         binding.autoCompleteTextView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val query = parent.getItemAtPosition(position).toString()
-                mainViewModel.getCurrencies(query)
+                backupFavorites()
+                mainViewModel.getCurrencies(parent.getItemAtPosition(position).toString())
             }
         binding.filterFab.setOnClickListener {
             findNavController().navigate(PopularFragmentDirections.actionPopularScreenToFilterFragment(
                 "POPULAR"))
+        }
+    }
+
+    private fun backupFavorites() {
+        mainViewModel.readFavoriteCurrencies.observe(viewLifecycleOwner) { database ->
+            if (database.isNotEmpty()) {
+                val list = StringBuilder()
+                database.forEach { list.append("${it.name},") }
+                preferences.edit().putString("FAVORITES", list.toString().removeSuffix(",")).apply()
+            }
         }
     }
 

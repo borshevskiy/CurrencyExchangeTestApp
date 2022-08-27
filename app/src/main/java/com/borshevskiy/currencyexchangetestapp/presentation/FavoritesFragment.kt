@@ -45,8 +45,11 @@ class FavoritesFragment : Fragment() {
         readDatabase()
         binding.autoCompleteTextView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                mainViewModel.getFavoriteCurrencies(parent.getItemAtPosition(position).toString(),
-                    "")
+                backupFavorites()
+                val list = preferences.getString("FAVORITES", "")
+                if (!list.isNullOrEmpty()) {
+                    mainViewModel.getFavoriteCurrencies(parent.getItemAtPosition(position).toString().trim(), list)
+                }
             }
         binding.filterFab.setOnClickListener {
             findNavController().navigate(FavoritesFragmentDirections.actionFavoritesScreenToFilterFragment(
@@ -68,6 +71,16 @@ class FavoritesFragment : Fragment() {
                 binding.autoCompleteTextView.setAdapter(ArrayAdapter(requireContext(),
                     R.layout.dropdown_item,
                     preferences.getString("CurrencyNames", "")!!.split(",")))
+            }
+        }
+    }
+
+    private fun backupFavorites() {
+        mainViewModel.readFavoriteCurrencies.observe(viewLifecycleOwner) { database ->
+            if (database.isNotEmpty()) {
+                val list = StringBuilder()
+                database.forEach { list.append("${it.name},") }
+                preferences.edit().putString("FAVORITES", list.toString().removeSuffix(",")).apply()
             }
         }
     }
